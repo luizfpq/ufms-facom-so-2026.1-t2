@@ -17,16 +17,26 @@ Implementa três estratégias: First Fit, Best Fit e Worst Fit, conforme Silbers
 ## Estrutura do Projeto
 
 ```
-├── memoria.h           # Structs e protótipos (header único)
-├── main.c              # Ponto de entrada e dispatch por function pointer
-├── arquivo.c           # Parser do arquivo de entrada
-├── memoria_ops.c       # Algoritmos de alocação e liberação
-├── visualizacao.c      # Interface textual e relatório final
-├── Makefile            # Compilação e atalhos de execução
-├── entrada_first_fit.txt   # Cenário de teste
+.
+├── memoria.h               # Structs e protótipos (header único)
+├── main.c                  # Ponto de entrada e dispatch por function pointer
+├── arquivo.c               # Parser do arquivo de entrada
+├── memoria_ops.c           # Algoritmos de alocação e liberação
+├── visualizacao.c          # Interface textual e relatório final
+├── Makefile                # Compilação e atalhos de execução
+├── entrada_first_fit.txt   # Cenário First Fit
+├── entrada_best_fit.txt    # Cenário Best Fit
+├── entrada_worst_fit.txt   # Cenário Worst Fit
 ├── entrada_comparativo.txt # Cenário para análise comparativa
-└── relatorio.tex       # Relatório LaTeX
+├── entrada_robustez.txt    # Cenário de casos de borda
+├── resultados/             # Saídas reproduzíveis de cada algoritmo
+├── relatorio.pdf           # Relatório final (PDF)
+└── relatorio-fonte/        # Fontes LaTeX do relatório (.tex, .bib, media)
 ```
+
+> **Entrega ao docente:** enviar o `relatorio.pdf` e os códigos (todos os arquivos
+> da raiz). A pasta `relatorio-fonte/` contém apenas os fontes LaTeX e não precisa
+> ser enviada.
 
 ---
 

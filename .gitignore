@@ -1,6 +1,9 @@
 # Compilado
 simulador
 
+# PDF de build do relatorio (a entrega usa o relatorio.pdf da raiz)
+relatorio-fonte/relatorio.pdf
+
 # LaTeX auxiliares
 *.aux
 *.log
