@@ -45,8 +45,12 @@ void carregar_entrada(const char *caminho, Memoria *mem,
             continue;
         }
 
-        if (*n_eventos >= MAX_EVENTOS)
+        if (*n_eventos >= MAX_EVENTOS) {
+            fprintf(stderr,
+                    "[aviso] Limite de %d eventos atingido. "
+                    "Eventos restantes ignorados.\n", MAX_EVENTOS);
             break;
+        }
 
         char cmd[16], id_str[16];
         Evento *ev = &eventos[*n_eventos];

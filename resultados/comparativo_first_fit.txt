@@ -1,5 +1,5 @@
 --- Entrada carregada ---
-Arquivo   : /tmp/comp_ff.txt
+Arquivo   : /tmp/c1.txt
 Algoritmo : FIRST_FIT
 Memoria   : 1000
 Eventos   : 13
@@ -106,7 +106,7 @@ Memoria total: 1000 unidades
   +--------------------------------------------------------+
   1111111111555555555555..333333366666............
 
-  [9] ALOCAR P7 (350 un.) -> FALHOU (sem bloco contiguo)
+  [9] ALOCAR P7 (350 un.) -> FALHOU (memoria livre insuficiente)
 
   [Passo 9] Memoria (1000 unidades):
   +--------------------------------------------------------+
@@ -159,7 +159,7 @@ Memoria total: 1000 unidades
   +--------------------------------------------------------+
   8888......555555555555..........66666............
 
-  [13] ALOCAR P9 (400 un.) -> FALHOU (sem bloco contiguo)
+  [13] ALOCAR P9 (400 un.) -> FALHOU (fragmentacao externa: ha espaco total, mas nao contiguo)
 
   [Passo 13] Memoria (1000 unidades):
   +--------------------------------------------------------+

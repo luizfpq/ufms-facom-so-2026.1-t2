@@ -139,7 +139,7 @@ arquivo.c        - Parser do arquivo de entrada
 memoria_ops.c    - Algoritmos de alocacao e liberacao
 visualizacao.c   - Interface textual e relatorio
 Makefile         - Compilacao e execucao
-entrada_*.txt    - Cenarios de teste (first, best, worst, comparativo)
+entrada_*.txt    - Cenarios de teste (first, best, worst, comparativo, robustez)
 resultados/      - Saidas reproduziveis de cada algoritmo
 \end{lstlisting}
 
@@ -233,7 +233,7 @@ Exemplo de saída após três alocações e uma liberação:
 
 O relatório final apresenta: memória total, espaço ocupado e livre, número de brechas, percentual de utilização, total de alocações que falharam e fragmentações externas detectadas.
 
-A fragmentação externa é detectada quando a soma dos blocos livres é suficiente para atender a requisição, mas nenhum bloco individual comporta o processo. O simulador reporta essa condição explicitamente.
+A fragmentação externa é detectada quando a soma dos blocos livres é suficiente para atender a requisição, mas nenhum bloco individual comporta o processo. O simulador reporta essa condição com mensagem própria, distinta da falha por memória insuficiente. Cada alocação tem um de cinco desfechos: sucesso, falha por fragmentação externa, falha por memória insuficiente, rejeição por tamanho inválido ou rejeição por processo já alocado.
 
 % ===================================================================
 \section{Análise Comparativa}
@@ -282,6 +282,24 @@ As saídas completas de cada execução estão disponíveis na pasta \texttt{res
 \end{itemize}
 
 % ===================================================================
+\section{Revisão Crítica e Correções}
+% ===================================================================
+
+Antes de fechar o trabalho, revisei o simulador contra o enunciado, evento por evento. A primeira versão passava nos casos normais. Falhava nos casos de borda. Registro aqui o que encontrei e como corrigi.
+
+\textbf{Mensagem de falha ambígua.} O enunciado pede para sinalizar fragmentação externa: quando há espaço total, mas não contíguo. A primeira versão rotulava toda falha como ``sem bloco contiguo''. Isso mistura duas causas distintas. Pedir 2000 unidades em uma memória de 1000 não é fragmentação. É falta de memória. Separei os dois casos. Agora o simulador informa ``fragmentacao externa'' quando o espaço total existe, e ``memoria livre insuficiente'' quando não existe.
+
+\textbf{Tamanho inválido.} A primeira versão aceitava \texttt{ALOCAR} com tamanho zero. Criava uma partição vazia. Adicionei validação: tamanho menor ou igual a zero é rejeitado antes de tentar alocar.
+
+\textbf{Processo duplicado.} Dois \texttt{ALOCAR} com o mesmo ID eram aceitos. O \texttt{LIBERAR} seguinte só desalocava o primeiro bloco. Adicionei checagem de unicidade. Um ID já presente na memória é rejeitado.
+
+\textbf{Truncamento silencioso.} O parser ignorava eventos acima do limite de 100 sem avisar. Agora emite alerta quando atinge o limite.
+
+Criei o cenário \texttt{entrada\_robustez.txt} para exercitar todos esses casos de uma vez. A saída está em \texttt{resultados/robustez.txt}. Roda com \texttt{make robustez}.
+
+A lição foi clara. O difícil não foi implementar os algoritmos. A lógica de First, Best e Worst Fit segue o livro. O difícil foi tratar as entradas que o usuário não deveria mandar, mas manda. A robustez veio dos testes de borda, não da implementação inicial.
+
+% ===================================================================
 \section{Limitações}
 % ===================================================================
 
@@ -303,6 +321,8 @@ Em conformidade com a Resolução da UFMS publicada no Boletim Oficial (ID~58170
     \item Os \textbf{dados de entrada} (arquivos \texttt{entrada\_*.txt}) foram formatados e sugeridos com auxílio da ferramenta \textbf{Kiro CLI} (Anthropic), utilizada como apoio na geração de cenários de teste que evidenciem fragmentação externa e diferenças entre os algoritmos.
 
     \item Os \textbf{formatos dos dados de saída} foram refatorados no código C com auxílio da ferramenta \textbf{Kiro CLI} (Anthropic), para facilitar a visualização do estado da memória a cada passo.
+
+    \item A \textbf{revisão crítica} do código contra o enunciado e a implementação das \textbf{correções de robustez} (mensagens de falha distintas, validação de tamanho, processo duplicado e truncamento) contaram com apoio da ferramenta \textbf{Kiro CLI} (Anthropic), que atuou como revisora e apontou os casos de borda. A decisão sobre o que corrigir e como tratar cada caso foi minha.
 
     \item A \textbf{lógica dos algoritmos}, a \textbf{estrutura do código} e a \textbf{análise dos resultados} são de autoria própria, baseadas nas referências bibliográficas citadas neste documento.
 \end{itemize}

@@ -47,7 +47,10 @@ make
 
 ```bash
 ./simulador <arquivo_de_entrada.txt>
+./simulador <arquivo_de_entrada.txt> -a ALGORITMO
 ```
+
+A flag `-a` sobrescreve o algoritmo definido no cabeçalho do arquivo, sem precisar editá-lo.
 
 ### Atalhos
 
@@ -55,7 +58,9 @@ make
 make first          # First Fit
 make best           # Best Fit
 make worst          # Worst Fit
+make robustez       # Cenário de casos de borda
 make comparativo    # Três algoritmos na mesma entrada
+make help           # Exibe as opções disponíveis
 ```
 
 ---
@@ -81,7 +86,12 @@ Algoritmos aceitos: `FIRST_FIT`, `BEST_FIT`, `WORST_FIT`.
 
 Após cada evento, o simulador exibe:
 
-1. Resultado da operação (OK ou FALHOU)
+1. Resultado da operação, com um de cinco desfechos:
+   - `OK`
+   - `FALHOU (fragmentacao externa)` — há espaço total, mas não contíguo
+   - `FALHOU (memoria livre insuficiente)` — não há espaço total
+   - `REJEITADO (tamanho invalido)` — tamanho ≤ 0
+   - `REJEITADO (processo ja alocado)` — ID duplicado
 2. Tabela com blocos ocupados e livres (endereço, tamanho)
 3. Mapa visual compacto da memória
 

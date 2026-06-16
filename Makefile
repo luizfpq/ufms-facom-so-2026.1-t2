@@ -18,6 +18,9 @@ best: $(TARGET)
 worst: $(TARGET)
 	./$(TARGET) entrada_worst_fit.txt
 
+robustez: $(TARGET)
+	./$(TARGET) entrada_robustez.txt
+
 comparativo: $(TARGET)
 	@echo ""
 	@echo "========== FIRST FIT =========="
@@ -47,8 +50,9 @@ help:
 	@echo "  make first      Executa com First Fit"
 	@echo "  make best       Executa com Best Fit"
 	@echo "  make worst      Executa com Worst Fit"
+	@echo "  make robustez   Executa o cenario de casos de borda"
 	@echo "  make comparativo  Executa os 3 algoritmos na mesma entrada"
 	@echo "  make clean      Remove o binario"
 	@echo "  make help       Exibe esta ajuda"
 
-.PHONY: all clean first best worst comparativo help
+.PHONY: all clean first best worst robustez comparativo help

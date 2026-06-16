@@ -142,3 +142,13 @@ int tem_fragmentacao_externa(Memoria *mem, int tam)
     /* Fragmentacao externa = tem espaco no total, mas nenhum bloco cabe */
     return (livre_total >= tam);
 }
+
+/* Verifica se um processo ja esta alocado na memoria */
+int mem_pid_existe(Memoria *mem, int pid)
+{
+    for (int i = 0; i < mem->n_blocos; i++) {
+        if (mem->blocos[i].pid == pid)
+            return 1;
+    }
+    return 0;
+}

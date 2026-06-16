@@ -60,13 +60,24 @@ int main(int argc, char *argv[])
     /* Loop principal: processa cada evento */
     for (int i = 0; i < n_eventos; i++) {
         Evento *ev = &eventos[i];
-        int ok = 1;
+        int status = ST_OK;
 
         if (ev->tipo == 0) {
-            ok = fn_alocar(&mem, ev->pid, ev->tamanho);
-            if (!ok) {
-                if (tem_fragmentacao_externa(&mem, ev->tamanho))
+            /* Validacoes de entrada antes de tentar alocar */
+            if (ev->tamanho <= 0) {
+                status = ST_TAM_INVALIDO;
+            } else if (mem_pid_existe(&mem, ev->pid)) {
+                status = ST_PID_DUPLICADO;
+            } else if (fn_alocar(&mem, ev->pid, ev->tamanho)) {
+                status = ST_OK;
+            } else {
+                /* Falhou por espaco: distingue a causa */
+                if (tem_fragmentacao_externa(&mem, ev->tamanho)) {
+                    status = ST_FRAG_EXTERNA;
                     mem.frag_externas++;
+                } else {
+                    status = ST_SEM_MEMORIA;
+                }
                 mem.falhas++;
             }
         } else {
@@ -74,7 +85,7 @@ int main(int argc, char *argv[])
             mem_coalescer(&mem);
         }
 
-        mostrar_evento(i + 1, ev, ok);
+        mostrar_evento(i + 1, ev, status);
         mostrar_memoria(&mem, i + 1);
     }
 

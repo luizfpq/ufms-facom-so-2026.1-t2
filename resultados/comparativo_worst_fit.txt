@@ -1,5 +1,5 @@
 --- Entrada carregada ---
-Arquivo   : /tmp/comp_wf.txt
+Arquivo   : /tmp/c3.txt
 Algoritmo : WORST_FIT
 Memoria   : 1000
 Eventos   : 13
@@ -106,7 +106,7 @@ Memoria total: 1000 unidades
   +--------------------------------------------------------+
   111111111166666..........3333333555555555555.....
 
-  [9] ALOCAR P7 (350 un.) -> FALHOU (sem bloco contiguo)
+  [9] ALOCAR P7 (350 un.) -> FALHOU (memoria livre insuficiente)
 
   [Passo 9] Memoria (1000 unidades):
   +--------------------------------------------------------+
@@ -159,7 +159,7 @@ Memoria total: 1000 unidades
   +--------------------------------------------------------+
   8888......66666.................555555555555.....
 
-  [13] ALOCAR P9 (400 un.) -> FALHOU (sem bloco contiguo)
+  [13] ALOCAR P9 (400 un.) -> FALHOU (fragmentacao externa: ha espaco total, mas nao contiguo)
 
   [Passo 13] Memoria (1000 unidades):
   +--------------------------------------------------------+

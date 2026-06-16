@@ -1,0 +1,23 @@
+# ============================================================
+# Arquivo de entrada — Teste de robustez (casos de borda)
+# Universidade Federal de Mato Grosso do Sul
+# Sistemas Operacionais 2026 — Luiz Quirino
+# ============================================================
+# Algoritmo: FIRST_FIT
+# Memoria: 1000
+#
+# Exercita: memoria insuficiente, fragmentacao externa,
+#           tamanho invalido, PID duplicado, liberacao invalida.
+#
+# evento   id   tamanho
+ALOCAR  P1  300
+ALOCAR  P1  100
+ALOCAR  P2  300
+ALOCAR  P3  300
+ALOCAR  P9  2000
+LIBERAR P1
+LIBERAR P3
+ALOCAR  P4  500
+ALOCAR  P5  0
+LIBERAR P8
+ALOCAR  P6  150

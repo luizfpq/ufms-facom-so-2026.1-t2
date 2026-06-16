@@ -14,6 +14,15 @@
 #define MAX_BLOCOS    200
 #define MAX_EVENTOS   100
 
+/* Códigos de status de um evento de alocação */
+enum {
+    ST_OK = 0,          /* alocou ou liberou com sucesso */
+    ST_FRAG_EXTERNA,    /* falhou: espaço total existe, mas não contíguo */
+    ST_SEM_MEMORIA,     /* falhou: memória livre total insuficiente */
+    ST_TAM_INVALIDO,    /* rejeitado: tamanho <= 0 */
+    ST_PID_DUPLICADO    /* rejeitado: processo já alocado */
+};
+
 /* Um bloco contiguo de memoria (ocupado ou livre) */
 typedef struct {
     int inicio;        /* endereco inicial */
@@ -50,10 +59,11 @@ int  worst_fit(Memoria *mem, int pid, int tam);
 void mem_liberar(Memoria *mem, int pid);
 void mem_coalescer(Memoria *mem);
 int  tem_fragmentacao_externa(Memoria *mem, int tam);
+int  mem_pid_existe(Memoria *mem, int pid);
 
 /* visualizacao.c */
 void mostrar_memoria(Memoria *mem, int passo);
-void mostrar_evento(int passo, Evento *ev, int ok);
+void mostrar_evento(int passo, Evento *ev, int status);
 void mostrar_relatorio(Memoria *mem, int n_eventos);
 
 #endif

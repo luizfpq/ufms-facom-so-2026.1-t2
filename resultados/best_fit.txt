@@ -46,7 +46,7 @@ Memoria total: 1000 unidades
   +--------------------------------------------------------+
   11111111112222222222222222222233333............
 
-  [4] ALOCAR P4 (426 un.) -> FALHOU (sem bloco contiguo)
+  [4] ALOCAR P4 (426 un.) -> FALHOU (memoria livre insuficiente)
 
   [Passo 4] Memoria (1000 unidades):
   +--------------------------------------------------------+
@@ -133,7 +133,7 @@ Memoria total: 1000 unidades
   +--------------------------------------------------------+
   ..........6666666666................555557777777.
 
-  [11] ALOCAR P8 (400 un.) -> FALHOU (sem bloco contiguo)
+  [11] ALOCAR P8 (400 un.) -> FALHOU (fragmentacao externa: ha espaco total, mas nao contiguo)
 
   [Passo 11] Memoria (1000 unidades):
   +--------------------------------------------------------+

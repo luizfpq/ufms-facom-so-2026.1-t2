@@ -47,13 +47,32 @@ void mostrar_memoria(Memoria *mem, int passo)
     printf("\n");
 }
 
-void mostrar_evento(int passo, Evento *ev, int ok)
+void mostrar_evento(int passo, Evento *ev, int status)
 {
     printf("\n");
     if (ev->tipo == 0) {
+        const char *msg;
+        switch (status) {
+            case ST_OK:
+                msg = "OK";
+                break;
+            case ST_FRAG_EXTERNA:
+                msg = "FALHOU (fragmentacao externa: ha espaco total, mas nao contiguo)";
+                break;
+            case ST_SEM_MEMORIA:
+                msg = "FALHOU (memoria livre insuficiente)";
+                break;
+            case ST_TAM_INVALIDO:
+                msg = "REJEITADO (tamanho invalido, deve ser > 0)";
+                break;
+            case ST_PID_DUPLICADO:
+                msg = "REJEITADO (processo ja alocado na memoria)";
+                break;
+            default:
+                msg = "FALHOU";
+        }
         printf("  [%d] ALOCAR P%d (%d un.) -> %s\n",
-               passo, ev->pid, ev->tamanho,
-               ok ? "OK" : "FALHOU (sem bloco contiguo)");
+               passo, ev->pid, ev->tamanho, msg);
     } else {
         printf("  [%d] LIBERAR P%d\n", passo, ev->pid);
     }
