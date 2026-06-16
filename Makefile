@@ -4,6 +4,13 @@ TARGET  = simulador
 SRCS    = main.c arquivo.c memoria_ops.c visualizacao.c
 
 all: $(TARGET)
+	@echo ""
+	@echo "Compilado com sucesso. Uso:"
+	@echo "  ./simulador <arquivo.txt> [-a ALGORITMO]"
+	@echo ""
+	@echo "Atalhos: make first | make best | make worst | make comparativo"
+	@echo "Ajuda:   make help"
+	@echo ""
 
 $(TARGET): $(SRCS) memoria.h
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
@@ -34,4 +41,20 @@ comparativo: $(TARGET)
 clean:
 	rm -f $(TARGET)
 
-.PHONY: all clean first best worst comparativo
+help:
+	@echo "Simulador de Alocacao de Memoria — UFMS/FACOM SO 2026.1"
+	@echo ""
+	@echo "Uso: ./simulador <arquivo.txt> [-a ALGORITMO]"
+	@echo ""
+	@echo "Algoritmos: FIRST_FIT, BEST_FIT, WORST_FIT"
+	@echo ""
+	@echo "Targets:"
+	@echo "  make            Compila o simulador"
+	@echo "  make first      Executa com First Fit"
+	@echo "  make best       Executa com Best Fit"
+	@echo "  make worst      Executa com Worst Fit"
+	@echo "  make comparativo  Executa os 3 algoritmos na mesma entrada"
+	@echo "  make clean      Remove o binario"
+	@echo "  make help       Exibe esta ajuda"
+
+.PHONY: all clean first best worst comparativo help
