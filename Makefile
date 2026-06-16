@@ -4,13 +4,7 @@ TARGET  = simulador
 SRCS    = main.c arquivo.c memoria_ops.c visualizacao.c
 
 all: $(TARGET)
-	@echo ""
-	@echo "Compilado com sucesso. Uso:"
-	@echo "  ./simulador <arquivo.txt> [-a ALGORITMO]"
-	@echo ""
-	@echo "Atalhos: make first | make best | make worst | make comparativo"
-	@echo "Ajuda:   make help"
-	@echo ""
+	@$(MAKE) --no-print-directory help
 
 $(TARGET): $(SRCS) memoria.h
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
