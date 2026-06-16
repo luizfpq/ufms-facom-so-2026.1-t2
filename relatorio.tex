@@ -168,6 +168,8 @@ O dispatch de algoritmos usa function pointers. O main atribui a função de alo
 
 \subsection{Compilação}
 
+Ao compilar, o Makefile exibe automaticamente as opções de uso disponíveis:
+
 \begin{lstlisting}
 make
 \end{lstlisting}
@@ -192,6 +194,7 @@ make first          # First Fit
 make best           # Best Fit
 make worst          # Worst Fit
 make comparativo    # Tres algoritmos na mesma entrada
+make help           # Exibe opcoes disponiveis
 \end{lstlisting}
 
 O formato do arquivo de entrada é simples. Linhas com \texttt{\#} configuram parâmetros ou são ignoradas. Cada evento é uma linha com comando, ID do processo e tamanho (quando aplicável):
