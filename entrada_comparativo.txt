@@ -1,0 +1,22 @@
+# ============================================================
+# Arquivo de entrada — Comparativo de algoritmos
+# Universidade Federal de Mato Grosso do Sul
+# Sistemas Operacionais 2026 — Luiz Quirino
+# ============================================================
+# Algoritmo: FIRST_FIT
+# Memoria: 1000
+#
+# evento   id   tamanho
+ALOCAR  P1  200
+ALOCAR  P2  300
+ALOCAR  P3  150
+ALOCAR  P4  200
+LIBERAR P2
+LIBERAR P4
+ALOCAR  P5  250
+ALOCAR  P6  100
+ALOCAR  P7  350
+LIBERAR P1
+ALOCAR  P8  80
+LIBERAR P3
+ALOCAR  P9  400

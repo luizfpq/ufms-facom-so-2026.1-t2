@@ -1,0 +1,300 @@
+\documentclass[12pt]{article}
+
+% --- Pacotes Essenciais ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage[paperheight=11.69in,paperwidth=8.27in,left=0.59in,right=0.59in,top=0.71in,bottom=0.71in,headheight=1in]{geometry}
+
+\usepackage{csquotes}
+
+\usepackage[backend=biber,
+style=numeric,
+sorting=none,
+isbn=false,
+doi=false,
+url=false,
+]{biblatex}
+\addbibresource{bibliography.bib}
+
+% --- Matemática e Símbolos ---
+\usepackage{amsmath, amsfonts, amssymb, latexsym, extarrows, wasysym}
+
+% --- Gráficos e Cores ---
+\usepackage{graphicx}
+\usepackage[svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes.symbols,shapes.geometric,shadows,arrows.meta}
+\usepackage{float}
+\usepackage{transparent}
+\usepackage{eso-pic}
+
+% --- Tabelas e Formatação ---
+\usepackage{array, longtable, hhline, multirow, makecell, tabularx}
+\usepackage{setspace, changepage, multicol, ragged2e, adjustbox}
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+% --- Links e Código ---
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+
+% Configuração de Listagens (mystyle)
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    numbers=left,
+    numbersep=5pt
+}
+\lstset{style=mystyle}
+
+% --- Marca d'água ---
+\AddToShipoutPicture{
+\put(0,0){
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill\centering
+{\transparent{0.1}\includegraphics[width=1.1\textwidth]{media/fundo.png}}%
+\vfill}}}
+
+\begin{document}
+
+% Cabeçalho Institucional
+\noindent
+\begin{tabular}{cl}
+    \multirow{3}{*}{\includegraphics[scale=0.10]{media/logo_topo.png}} 
+    & UNIVERSIDADE FEDERAL DE MATO GROSSO DO SUL \\
+    & FACULDADE DE COMPUTAÇÃO \\
+    & PROGRAMA DE PÓS-GRADUAÇÃO EM CIÊNCIA DA COMPUTAÇÃO \\
+\end{tabular}
+
+\vspace{0.4cm}
+
+\noindent
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ll}
+    \textbf{Discente:} Luiz Fernando Postingel Quirino & \textbf{RGA:} 2026.01480 \\
+    \textbf{E-mail:} \texttt{luiz.quirino@ufms.br} & \textbf{Data:} \today \\
+\end{tabular*}
+
+\vspace{0.4cm}
+\noindent
+\textbf{Relatório:} Simulador de Alocação Dinâmica de Memória - Trabalho Prático 2\\
+\rule{\textwidth}{0.4pt}
+\vspace{0.8cm}
+
+%%%%%%%%%%%%%%%%%%%% Início do Texto %%%%%%%%%%%%%%%%%%%%
+
+% ===================================================================
+\section{Introdução}
+% ===================================================================
+
+Este documento descreve a implementação de um simulador de alocação dinâmica de memória contígua com partições variáveis. O programa lê um arquivo de entrada com o tamanho da memória e uma sequência de eventos (alocações e liberações de processos), executa a simulação passo a passo e exibe o estado da memória após cada operação.
+
+O simulador implementa três estratégias de alocação: First Fit, Best Fit e Worst Fit. As definições seguem \cite{silberschatz2018}, capítulo 9, seções 9.2.2 e 9.2.3.
+
+O código foi escrito em C (padrão C99), compilado com GCC e organizado em módulos com um header único. A interface é textual, executada em terminal.
+
+% ===================================================================
+\section{Repositório}
+% ===================================================================
+
+O código-fonte completo está disponível no repositório GitHub:
+
+\begin{center}
+\url{https://github.com/luizfpq/ufms-facom-so-2026.1}
+\end{center}
+
+O repositório permaneceu \textbf{privado} durante toda a execução do projeto, sendo tornado público a partir das 23:59 do dia da entrega, permanecendo acessível até que o docente lance as notas ou solicite a retirada.
+
+% ===================================================================
+\section{Algoritmos de Alocação}
+% ===================================================================
+
+Os três algoritmos compartilham a mesma estrutura de dados (vetor de blocos contíguos) e diferem apenas no critério de seleção do bloco livre.
+
+\textbf{First Fit.} Percorre a lista de blocos do início ao fim. Aloca no primeiro bloco livre com tamanho suficiente. Complexidade O(n) por operação. Tende a fragmentar o início da memória, porque alocações consecutivas se concentram nas primeiras brechas disponíveis.
+
+\textbf{Best Fit.} Percorre toda a lista e escolhe o menor bloco livre que comporte o processo. Complexidade O(n). Minimiza o desperdício imediato, mas gera brechas pequenas que dificilmente serão reutilizadas. Segundo \cite{silberschatz2018}, pode produzir fragmentação pior que o First Fit em cargas de trabalho com alocações de tamanhos variados.
+
+\textbf{Worst Fit.} Percorre toda a lista e escolhe o maior bloco livre disponível. Complexidade O(n). A ideia é que a brecha restante seja grande o suficiente para atender outros processos. Na prática, consome rapidamente os blocos grandes e pode forçar falhas de alocação mais cedo.
+
+% ===================================================================
+\section{Estrutura do Projeto}
+% ===================================================================
+
+A organização segue o princípio de um arquivo por responsabilidade.
+
+\begin{lstlisting}
+memoria.h        - Structs e prototipos (header unico)
+main.c           - Ponto de entrada e dispatch
+arquivo.c        - Parser do arquivo de entrada
+memoria_ops.c    - Algoritmos de alocacao e liberacao
+visualizacao.c   - Interface textual e relatorio
+Makefile         - Compilacao e execucao
+entrada_*.txt    - Cenarios de teste
+\end{lstlisting}
+
+A memória é representada por um vetor estático de blocos. Cada bloco possui endereço inicial, tamanho e identificador do processo ocupante (zero indica bloco livre). Quando um processo é alocado em um bloco maior que o necessário, o bloco é dividido em dois: a parte ocupada e o restante livre. Quando um processo é liberado, blocos livres adjacentes são mesclados automaticamente.
+
+\begin{lstlisting}[language=C]
+typedef struct {
+    int inicio;        /* endereco inicial */
+    int tamanho;
+    int pid;           /* id do processo, 0 = livre */
+} Bloco;
+\end{lstlisting}
+
+O dispatch de algoritmos usa function pointers. O main atribui a função de alocação uma vez (conforme o cabeçalho do arquivo de entrada) e a reutiliza em todos os eventos.
+
+% ===================================================================
+\section{Compilação e Uso}
+% ===================================================================
+
+\subsection{Pré-requisitos}
+
+\begin{itemize}
+    \item GCC (GNU Compiler Collection)
+    \item GNU Make
+\end{itemize}
+
+\subsection{Compilação}
+
+\begin{lstlisting}
+make
+\end{lstlisting}
+
+\subsection{Execução}
+
+\begin{lstlisting}
+./simulador <arquivo_de_entrada.txt>
+\end{lstlisting}
+
+Ou via Make:
+
+\begin{lstlisting}
+make first          # First Fit
+make best           # Best Fit
+make worst          # Worst Fit
+make comparativo    # Tres algoritmos na mesma entrada
+\end{lstlisting}
+
+O formato do arquivo de entrada é simples. Linhas com \texttt{\#} configuram parâmetros ou são ignoradas. Cada evento é uma linha com comando, ID do processo e tamanho (quando aplicável):
+
+\begin{lstlisting}
+# Algoritmo: FIRST_FIT
+# Memoria: 1000
+ALOCAR  P1  200
+ALOCAR  P2  300
+LIBERAR P1
+ALOCAR  P3  250
+\end{lstlisting}
+
+Algoritmos aceitos: \texttt{FIRST\_FIT}, \texttt{BEST\_FIT}, \texttt{WORST\_FIT}.
+
+% ===================================================================
+\section{Visualização}
+% ===================================================================
+
+O simulador exibe após cada passo: (1) tabela com todos os blocos, indicando se estão ocupados ou livres, com endereço e tamanho; (2) mapa visual compacto (caracteres \texttt{.} para livre, dígito do ID para ocupado); (3) resultado da operação (sucesso ou falha, com indicação de fragmentação externa quando aplicável).
+
+Exemplo de saída após três alocações e uma liberação:
+
+\begin{lstlisting}
+  [5] LIBERAR P2
+
+  [Passo 5] Memoria (1000 unidades):
+  +--------------------------------------------------------+
+  | P1      inicio=0     tam=200                        |
+  | LIVRE   inicio=200   tam=300                        |
+  | P3      inicio=500   tam=150                        |
+  | LIVRE   inicio=650   tam=350                        |
+  +--------------------------------------------------------+
+  1111111111...............3333333.................
+\end{lstlisting}
+
+O relatório final apresenta: memória total, espaço ocupado e livre, número de brechas, percentual de utilização, total de alocações que falharam e fragmentações externas detectadas.
+
+A fragmentação externa é detectada quando a soma dos blocos livres é suficiente para atender a requisição, mas nenhum bloco individual comporta o processo. O simulador reporta essa condição explicitamente.
+
+% ===================================================================
+\section{Análise Comparativa}
+% ===================================================================
+
+Para evidenciar as diferenças entre os algoritmos, os três foram executados com a mesma entrada: memória de 1000 unidades e 13 eventos projetados para provocar fragmentação (alocações de tamanhos variados intercaladas com liberações não sequenciais).
+
+\begin{table}[htb]
+\centering
+\caption{Resultados comparativos com o cenário de teste.}
+\label{tab:resultados}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Métrica} & \textbf{First Fit} & \textbf{Best Fit} & \textbf{Worst Fit} \\
+\midrule
+Utilização final         & 43,0\% & 43,0\% & 43,0\% \\
+Brechas ao final         & 3      & 3      & 3      \\
+Alocações que falharam   & 2      & 2      & 2      \\
+Fragmentações externas   & 1      & 1      & 1      \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+No cenário testado, os três algoritmos apresentaram os mesmos totais de falhas. A diferença está no posicionamento dos blocos ao longo da simulação.
+
+First Fit e Best Fit alocaram P5 (250 unidades) na brecha de 300 deixada por P2 (posição 200). A brecha de 300 era simultaneamente a primeira e a menor que comportava 250, por isso os dois algoritmos coincidiram.
+
+Worst Fit alocou P5 na brecha final (maior contíguo), posicionando-o mais adiante na memória. Isso preservou o espaço no início, mas consumiu a maior brecha disponível.
+
+A fragmentação externa ocorreu no passo 13 (P9, 400 unidades): havia 570 unidades livres distribuídas em 3 brechas, nenhuma com 400 contíguos. Esse resultado é idêntico nos três algoritmos porque a sequência de liberações criou o mesmo padrão de brechas residuais.
+
+% ===================================================================
+\section{Decisões de Implementação}
+% ===================================================================
+
+\begin{itemize}
+    \item \textbf{Vetor estático de blocos.} Limite de 200 blocos e 100 eventos. Suficiente para simulação didática e evita complexidade de alocação dinâmica (malloc/free) no próprio simulador de memória.
+
+    \item \textbf{Mesclagem automática.} Após cada liberação, blocos livres adjacentes são fundidos. Reduz fragmentação sem intervenção manual e mantém a lista compacta.
+
+    \item \textbf{Divisão de bloco.} Quando sobra espaço após alocação, um novo bloco livre é inserido na posição seguinte. A lista permanece sempre ordenada por endereço.
+
+    \item \textbf{Detecção de fragmentação.} Soma todos os blocos livres e compara com a requisição. Se o total é suficiente mas nenhum individual comporta, reporta fragmentação externa.
+\end{itemize}
+
+% ===================================================================
+\section{Limitações}
+% ===================================================================
+
+\begin{itemize}
+    \item Não implementa compactação de memória, paginação ou segmentação.
+    \item Cada processo ocupa exatamente um bloco contíguo.
+    \item Não há modelagem de tempo de acesso nem overhead de gerenciamento.
+\end{itemize}
+
+Essas simplificações são coerentes com o escopo do enunciado, que trata exclusivamente de alocação contígua em esquema de partições variáveis.
+
+% ===================================================================
+\section{Declaração de Uso de Inteligência Artificial}
+% ===================================================================
+
+Em conformidade com a Resolução da UFMS publicada no Boletim Oficial (ID~581705), que regulamenta o uso de ferramentas de inteligência artificial em atividades acadêmicas, declaro que:
+
+\begin{itemize}
+    \item Os \textbf{dados de entrada} (arquivos \texttt{entrada\_*.txt}) foram formatados e sugeridos com auxílio da ferramenta \textbf{Kiro CLI} (Anthropic), utilizada como apoio na geração de cenários de teste que evidenciem fragmentação externa e diferenças entre os algoritmos.
+
+    \item Os \textbf{formatos dos dados de saída} foram refatorados no código C com auxílio da ferramenta \textbf{Kiro CLI} (Anthropic), para facilitar a visualização do estado da memória a cada passo.
+
+    \item A \textbf{lógica dos algoritmos}, a \textbf{estrutura do código} e a \textbf{análise dos resultados} são de autoria própria, baseadas nas referências bibliográficas citadas neste documento.
+\end{itemize}
+
+% ===================================================================
+\printbibliography
+
+\end{document}

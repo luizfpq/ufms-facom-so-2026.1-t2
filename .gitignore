@@ -1,0 +1,21 @@
+# Compilado
+simulador
+
+# LaTeX auxiliares
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bcf
+*.run.xml
+
+# OS
+.DS_Store
+*.swp
