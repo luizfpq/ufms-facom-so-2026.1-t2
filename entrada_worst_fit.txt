@@ -1,0 +1,20 @@
+# ============================================================
+# Arquivo de entrada — Worst Fit
+# Universidade Federal de Mato Grosso do Sul
+# Sistemas Operacionais 2026 — Luiz Quirino
+# ============================================================
+# Algoritmo: WORST_FIT
+# Memoria: 1000
+#
+# evento   id   tamanho
+ALOCAR  P1  212
+ALOCAR  P2  417
+ALOCAR  P3  112
+ALOCAR  P4  426
+LIBERAR P2
+ALOCAR  P5  100
+ALOCAR  P6  200
+ALOCAR  P7  150
+LIBERAR P3
+LIBERAR P1
+ALOCAR  P8  400

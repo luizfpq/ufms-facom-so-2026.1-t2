@@ -4,7 +4,8 @@
  * UFMS — FACOM — SO 2026.1
  * Luiz Quirino <luiz.quirino@ufms.br>
  *
- * Uso: ./simulador <arquivo.txt>
+ * Uso: ./simulador <arquivo.txt> [-a ALGORITMO]
+ *      Algoritmos: FIRST_FIT, BEST_FIT, WORST_FIT
  */
 
 #include <stdio.h>
@@ -14,7 +15,8 @@
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
-        fprintf(stderr, "Uso: %s <arquivo_entrada.txt>\n", argv[0]);
+        fprintf(stderr, "Uso: %s <arquivo_entrada.txt> [-a ALGORITMO]\n", argv[0]);
+        fprintf(stderr, "Algoritmos: FIRST_FIT, BEST_FIT, WORST_FIT\n");
         return 1;
     }
 
@@ -24,6 +26,15 @@ int main(int argc, char *argv[])
     char alg[20];
 
     carregar_entrada(argv[1], &mem, eventos, &n_eventos, alg);
+
+    /* Flag -a sobrescreve o algoritmo do arquivo */
+    for (int i = 2; i < argc - 1; i++) {
+        if (strcmp(argv[i], "-a") == 0) {
+            strncpy(alg, argv[i + 1], 19);
+            alg[19] = '\0';
+            break;
+        }
+    }
 
     /* Seleciona a funcao de alocacao pelo nome do algoritmo */
     int (*fn_alocar)(Memoria *, int, int) = NULL;
@@ -52,7 +63,6 @@ int main(int argc, char *argv[])
         int ok = 1;
 
         if (ev->tipo == 0) {
-            /* Tenta alocar */
             ok = fn_alocar(&mem, ev->pid, ev->tamanho);
             if (!ok) {
                 if (tem_fragmentacao_externa(&mem, ev->tamanho))
@@ -60,7 +70,6 @@ int main(int argc, char *argv[])
                 mem.falhas++;
             }
         } else {
-            /* Libera e junta brechas adjacentes */
             mem_liberar(&mem, ev->pid);
             mem_coalescer(&mem);
         }
