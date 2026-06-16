@@ -139,7 +139,8 @@ arquivo.c        - Parser do arquivo de entrada
 memoria_ops.c    - Algoritmos de alocacao e liberacao
 visualizacao.c   - Interface textual e relatorio
 Makefile         - Compilacao e execucao
-entrada_*.txt    - Cenarios de teste
+entrada_*.txt    - Cenarios de teste (first, best, worst, comparativo)
+resultados/      - Saidas reproduziveis de cada algoritmo
 \end{lstlisting}
 
 A memória é representada por um vetor estático de blocos. Cada bloco possui endereço inicial, tamanho e identificador do processo ocupante (zero indica bloco livre). Quando um processo é alocado em um bloco maior que o necessário, o bloco é dividido em dois: a parte ocupada e o restante livre. Quando um processo é liberado, blocos livres adjacentes são mesclados automaticamente.
@@ -175,9 +176,16 @@ make
 
 \begin{lstlisting}
 ./simulador <arquivo_de_entrada.txt>
+./simulador <arquivo_de_entrada.txt> -a ALGORITMO
 \end{lstlisting}
 
-Ou via Make:
+A flag \texttt{-a} permite sobrescrever o algoritmo definido no cabeçalho do arquivo de entrada, possibilitando executar qualquer cenário com qualquer estratégia sem editar o arquivo:
+
+\begin{lstlisting}
+./simulador entrada_comparativo.txt -a WORST_FIT
+\end{lstlisting}
+
+Atalhos via Make:
 
 \begin{lstlisting}
 make first          # First Fit
@@ -253,6 +261,8 @@ First Fit e Best Fit alocaram P5 (250 unidades) na brecha de 300 deixada por P2 
 Worst Fit alocou P5 na brecha final (maior contíguo), posicionando-o mais adiante na memória. Isso preservou o espaço no início, mas consumiu a maior brecha disponível.
 
 A fragmentação externa ocorreu no passo 13 (P9, 400 unidades): havia 570 unidades livres distribuídas em 3 brechas, nenhuma com 400 contíguos. Esse resultado é idêntico nos três algoritmos porque a sequência de liberações criou o mesmo padrão de brechas residuais.
+
+As saídas completas de cada execução estão disponíveis na pasta \texttt{resultados/} do repositório, permitindo reprodução e verificação independente via \texttt{make comparativo}.
 
 % ===================================================================
 \section{Decisões de Implementação}
